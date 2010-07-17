@@ -3,8 +3,8 @@ Contributors: greenshady
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3687060
 Tags: image, images, thumbnail
 Requires at least: 2.9
-Tested up to: 2.9
-Stable tag: 0.4
+Tested up to: 3.0
+Stable tag: 0.5
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -57,6 +57,14 @@ You can view this plugin in action on my <a href="http://justintadlock.com" titl
 == Changelog ==
 
 Earlier versions were not documented well.
+
+**Version 0.5**
+
+* Added support for persistent-caching plugins.
+* Switched the `default_size` argument to `size` to be more in line with the WordPress post thumbnail arguments, but `default_size` will still work.
+* Now using `wp_kses_hair()` to extract image attributes when using the `array` value for `format`.
+* Image `alt` text will now use the attachment description if one has been given rather than the post title.
+* Updated the `readme.html` instructions for using the plugin.
 
 **Version 0.4**
 
