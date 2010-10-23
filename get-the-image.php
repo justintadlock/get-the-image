@@ -3,7 +3,7 @@
  * Plugin Name: Get The Image
  * Plugin URI: http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
  * Description: This is a highly intuitive script that can grab an image by custom field input, post attachment, or extracting it from the post's content.
- * Version: 0.5
+ * Version: 0.6
  * Author: Justin Tadlock
  * Author URI: http://justintadlock.com
  *
@@ -13,7 +13,7 @@
  * post (or any post type).
  *
  * @copyright 2008 - 2010
- * @version 0.5
+ * @version 0.6
  * @author Justin Tadlock
  * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -51,11 +51,10 @@ function get_the_image( $args = array() ) {
 
 	/* Set the default arguments. */
 	$defaults = array(
-		'custom_key' => array( 'Thumbnail', 'thumbnail' ),
+		'meta_key' => array( 'Thumbnail', 'thumbnail' ),
 		'post_id' => $post->ID,
 		'attachment' => true,
 		'the_post_thumbnail' => true, // WP 2.9+ image function
-		'default_size' => false, // Deprecated 0.5 in favor of $size
 		'size' => 'thumbnail',
 		'default_image' => false,
 		'order_of_image' => 1,
@@ -65,6 +64,9 @@ function get_the_image( $args = array() ) {
 		'width' => false,
 		'height' => false,
 		'format' => 'img',
+		'meta_key_save' => false,
+		'callback' => null,
+		'cache' => true,
 		'echo' => true
 	);
 
@@ -75,8 +77,12 @@ function get_the_image( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	/* If $default_size is given, overwrite $size. */
-	if ( !empty( $args['default_size'] ) )
-		$args['size'] = $args['default_size'];
+	if ( isset( $args['default_size'] ) )
+		$args['size'] = $args['default_size']; // Deprecated 0.5 in favor of $size
+
+	/* If $custom_key is set, overwrite $meta_key. */
+	if ( isset( $args['custom_key'] ) )
+		$args['meta_key'] = $args['custom_key']; // Deprecated 0.6 in favor of $meta_key
 
 	/* If $format is set to 'array', don't link to the post. */
 	if ( 'array' == $args['format'] )
@@ -86,43 +92,51 @@ function get_the_image( $args = array() ) {
 	extract( $args );
 
 	/* Check for a cached image. */
-	$cache = wp_cache_get( 'get_the_image' );
+	$image_cache = wp_cache_get( 'get_the_image' );
 
-	if ( !is_array( $cache ) )
-		$cache = array();
+	if ( !is_array( $image_cache ) )
+		$image_cache = array();
 
 	/* If there is no cached image, let's see if one exists. */
-	if ( !isset( $cache[$post_id][$size] ) ) {
+	if ( !isset( $image_cache[$post_id][$size] ) || empty( $cache ) ) {
 
 		/* If a custom field key (array) is defined, check for images by custom field. */
-		if ( $custom_key )
+		if ( !empty( $meta_key ) )
 			$image = image_by_custom_field( $args );
 
 		/* If no image found and $the_post_thumbnail is set to true, check for a post image (WP feature). */
-		if ( !$image && $the_post_thumbnail )
+		if ( empty( $image ) && !empty( $the_post_thumbnail ) )
 			$image = image_by_the_post_thumbnail( $args );
 
 		/* If no image found and $attachment is set to true, check for an image by attachment. */
-		if ( !$image && $attachment )
+		if ( empty( $image ) && !empty( $attachment ) )
 			$image = image_by_attachment( $args );
 
 		/* If no image found and $image_scan is set to true, scan the post for images. */
-		if ( !$image && $image_scan )
+		if ( empty( $image ) && !empty( $image_scan ) )
 			$image = image_by_scan( $args );
 
+		/* If no image found and a callback function was given. */
+		if ( empty( $image ) && !is_null( $callback ) && function_exists( $callback ) )
+			$image = call_user_func( $callback, $args );
+
 		/* If no image found and a $default_image is set, get the default image. */
-		if ( !$image && $default_image )
+		if ( empty( $image ) && !empty( $default_image ) )
 			$image = image_by_default( $args );
 
+		/* If $meta_key_save was set, save the image to a custom field. */
+		if ( !empty( $image ) && !empty( $meta_key_save ) )
+			get_the_image_meta_key_save( $args, $image );
+
 		/* If an image is returned, run it through the display function. */
-		if ( $image )
+		if ( !empty( $image ) )
 			$image = display_the_image( $args, $image );
 
-		$cache[$post_id][$size] = $image;
-		wp_cache_set( 'get_the_image', $cache );
+		$image_cache[$post_id][$size] = $image;
+		wp_cache_set( 'get_the_image', $image_cache );
 	}
 	else {
-		$image = $cache[$post_id][$size];
+		$image = $image_cache[$post_id][$size];
 	}
 
 	/* Allow plugins/theme to override the final output. */
@@ -138,7 +152,7 @@ function get_the_image( $args = array() ) {
 		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
 		return $out;
 	}
-	elseif ( $echo )
+	elseif ( !empty( $echo ) )
 		echo $image;
 	else
 		return $image;
@@ -157,13 +171,13 @@ function get_the_image( $args = array() ) {
  */
 function image_by_custom_field( $args = array() ) {
 
-	/* If $custom_key is a string, we want to split it by spaces into an array. */
-	if ( !is_array( $args['custom_key'] ) )
-		$args['custom_key'] = preg_split( '#\s+#', $args['custom_key'] );
+	/* If $meta_key is a string, we want to split it by spaces into an array. */
+	if ( !is_array( $args['meta_key'] ) )
+		$args['meta_key'] = preg_split( '#\s+#', $args['meta_key'] );
 
-	/* If $custom_key is set, loop through each custom field key, searching for values. */
-	if ( isset( $args['custom_key'] ) ) {
-		foreach ( $args['custom_key'] as $custom ) {
+	/* If $meta_key is set, loop through each custom field key, searching for values. */
+	if ( is_array( $args['meta_key'] ) ) {
+		foreach ( $args['meta_key'] as $custom ) {
 			$image = get_metadata( 'post', $args['post_id'], $custom, true );
 			if ( $image )
 				break;
@@ -234,6 +248,9 @@ function image_by_attachment( $args = array() ) {
 	if ( empty( $attachments ) && empty( $image ) )
 		return false;
 
+	/* Set the default iterator to 0. */
+	$i = 0;
+
 	/* Loop through each attachment. Once the $order_of_image (default is '1') is reached, break the loop. */
 	foreach ( $attachments as $id => $attachment ) {
 		if ( ++$i == $args['order_of_image'] ) {
@@ -299,15 +316,15 @@ function display_the_image( $args = array(), $image = false ) {
 	extract( $args );
 
 	/* If there is alt text, set it.  Otherwise, default to the post title. */
-	$image_alt = ( ( $image['alt'] ) ? $image['alt'] : apply_filters( 'the_title', get_post_field( 'post_title', $post_id ) ) );
+	$image_alt = ( ( !empty( $image['alt'] ) ) ? $image['alt'] : apply_filters( 'the_title', get_post_field( 'post_title', $post_id ) ) );
 
 	/* If there is a width or height, set them as HMTL-ready attributes. */
 	$width = ( ( $width ) ? ' width="' . esc_attr( $width ) . '"' : '' );
 	$height = ( ( $height ) ? ' height="' . esc_attr( $height ) . '"' : '' );
 
 	/* Loop through the custom field keys and add them as classes. */
-	if ( is_array( $custom_key ) ) {
-		foreach ( $custom_key as $key )
+	if ( is_array( $meta_key ) ) {
+		foreach ( $meta_key as $key )
 			$classes[] = str_replace( ' ', '-', strtolower( $key ) );
 	}
 
@@ -319,7 +336,7 @@ function display_the_image( $args = array(), $image = false ) {
 	$class = join( ' ', array_unique( $classes ) );
 
 	/* If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail(). */
-	if ( $image['post_thumbnail_id'] )
+	if ( !empty( $image['post_thumbnail_id'] ) )
 		do_action( 'begin_fetch_post_thumbnail_html', $post_id, $image['post_thumbnail_id'], $size );
 
 	/* Add the image attributes to the <img /> element. */
@@ -330,14 +347,42 @@ function display_the_image( $args = array(), $image = false ) {
 		$html = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( apply_filters( 'the_title', get_post_field( 'post_title', $post_id ) ) ) . '">' . $html . '</a>';
 
 	/* If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail(). */
-	if ( $image['post_thumbnail_id'] )
+	if ( !empty( $image['post_thumbnail_id'] ) )
 		do_action( 'end_fetch_post_thumbnail_html', $post_id, $image['post_thumbnail_id'], $size );
 
 	/* If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail(). */
-	if ( $image['post_thumbnail_id'] )
+	if ( !empty( $image['post_thumbnail_id'] ) )
 		$html = apply_filters( 'post_thumbnail_html', $html, $post_id, $image['post_thumbnail_id'], $size, '' );
 
 	return $html;
+}
+
+/**
+ * Saves the image URL as the value of the meta key provided.  This allows users to set a 
+ * custom meta key for their image.  By doing this, users can trim off database queries when 
+ * grabbing attachments or get rid of expensive scans of the content when using the image
+ * scan feature.
+ *
+ * @since 0.6
+ * @param array $args Parameters for what image to get.
+ * @param array $image Array of image info ($image, $classes, $alt, $caption).
+ */
+function get_the_image_meta_key_save( $args = array(), $image = array() ) {
+
+	/* If the $meta_key_save argument is empty or there is no image $url given, return. */
+	if ( empty( $args['meta_key_save'] ) || empty( $image['url'] ) )
+		return;
+
+	/* Get the current value of the meta key. */
+	$meta = get_post_meta( $args['post_id'], $args['meta_key_save'], true );
+
+	/* If there is no value for the meta key, set a new value with the image $url. */
+	if ( empty( $meta ) )
+		add_post_meta( $args['post_id'], $args['meta_key_save'], $image['url'] );
+
+	/* If the current value doesn't match the image $url, update it. */
+	elseif ( $meta !== $image['url'] )
+		update_post_meta( $args['post_id'], $args['meta_key_save'], $image['url'], $meta );
 }
 
 /**
