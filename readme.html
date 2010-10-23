@@ -71,7 +71,7 @@
 
 <dl>
 	<dt>meta_key</dt>
-	<dd>This parameter refers to post meta keys (custom fields) that you use.  Remember, meta keys are case-sensitive (defaults are <code>Thumbnail</code> and <code>thumbnail</code>).</dd>
+	<dd>This parameter refers to post meta keys (custom fields) that you use.  Remember, meta keys are case-sensitive (defaults are <code>Thumbnail</code> and <code>thumbnail</code>).  By default, this is an array of meta keys, but it can also be a string for a single meta key.</dd>
 	<dt>post_id</dt>
 	<dd>The ID of the post to get the image for.  This defaults to the current post in the loop.</dd>
 	<dt>attachment</dt>
@@ -116,7 +116,7 @@
 
 <p><strong>Example 2:</strong> Let's suppose you want a full-sized image and maybe you want to grab it by a custom field key of <code>Feature</code>.  Depending on your theme, this will need to go within the Loop in whatever file is calling the featured article.</p>
 
-<pre><code>&lt;?php get_the_image( array( 'meta_key' => array( 'Feature' ), 'size' => 'full' ) ); ?></code></pre>
+<pre><code>&lt;?php get_the_image( array( 'meta_key' => 'Feature', 'size' => 'full' ) ); ?></code></pre>
 
 <p>If no feature image exists by custom field, it will look for images attached to your post.</p>
 
@@ -132,6 +132,10 @@
 
 <pre><code>&lt;?php get_the_image( array( 'order_of_image' => 2 ) ); ?></code></pre>
 
+<p><strong>Example 6:</strong> Saving an image to the <code>Thumbnail</code> custom field automatically.</p>
+
+<pre><code>&lt;?php get_the_image( array( 'meta_key_save' => 'Thumbnail' ) ); ?></code></pre>
+
 <h2>A real-world example</h2>
 
 <p>This is an example Loop, which may differ slightly from your theme, but the concept is the same.  The call to get the image can go anywhere between the opening and closing lines.</p>
@@ -140,7 +144,7 @@
 
 	&lt;div id="post-&lt;?php the_ID(); ?>" &lt;?php post_class(); ?>>
 
-		&lt;?php get_the_image( array( 'meta_key' => array( 'feature_img' ), 'size' => 'medium', 'width' => '200', 'height' => '200', 'image_class' => 'feature' ) ); ?>
+		&lt;?php get_the_image( array( 'meta_key' => 'feature_img', 'size' => 'medium', 'width' => '200', 'height' => '200', 'image_class' => 'feature' ) ); ?>
 
 		&lt;h2>&lt;a href="&lt;?php the_permalink(); ?>" title="&lt;?php the_title_attribute(); ?>" rel="bookmark">&lt;?php the_title(); ?>&lt;/a>&lt;/h2>
 

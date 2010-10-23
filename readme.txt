@@ -3,8 +3,8 @@ Contributors: greenshady
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3687060
 Tags: image, images, thumbnail
 Requires at least: 2.9
-Tested up to: 3.0
-Stable tag: 0.6
+Tested up to: 3.0.1
+Stable tag: 0.6.1
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -55,6 +55,12 @@ To see all methods and options, refer to the `readme.html` file included with th
 You can view this plugin in action on my <a href="http://justintadlock.com" title="Justin Tadlock's blog">personal blog</a> (note the thumbnails).
 
 == Changelog ==
+
+**Version 0.6.1**
+
+* Updated inline documentation of the code.
+* Smarter `meta_key` logic, which allows a single meta key or an array of keys to be used.
+* Set `custom_key` and `default_size` to `null` by default since they're deprecated.
 
 **Version 0.6**
 
