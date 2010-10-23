@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: image, images, thumbnail
 Requires at least: 2.9
 Tested up to: 3.0
-Stable tag: 0.5
+Stable tag: 0.6
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -56,7 +56,12 @@ You can view this plugin in action on my <a href="http://justintadlock.com" titl
 
 == Changelog ==
 
-Earlier versions were not documented well.
+**Version 0.6**
+
+* Deprecated `custom_key` in favor of `meta_key`.
+* Added the `meta_key_save` argument to allow users to save the image as a meta key/value pair.
+* Added a `callback` argument to allow developers to create a custom callback function.
+* Added a `cache` argument, which allows users to turn off caching.
 
 **Version 0.5**
 
