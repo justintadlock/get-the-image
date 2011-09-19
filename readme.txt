@@ -2,9 +2,9 @@
 Contributors: greenshady
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3687060
 Tags: image, images, thumbnail
-Requires at least: 2.9
-Tested up to: 3.1.1
-Stable tag: 0.6.2
+Requires at least: 3.2
+Tested up to: 3.2.1
+Stable tag: 0.7
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -55,6 +55,12 @@ To see all methods and options, refer to the `readme.html` file included with th
 You can view this plugin in action on my <a href="http://justintadlock.com" title="Justin Tadlock's blog">personal blog</a> (note the thumbnails).
 
 == Changelog ==
+
+**Version 0.7**
+
+* Deprecated and replaced functions that lacked the `get_the_image_` prefix.
+* New cache delete functions that delete when a post or post meta is updated.
+* Fixed notice when `image_scan` was used.
 
 **Version 0.6.2**
 
