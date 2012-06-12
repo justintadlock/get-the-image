@@ -3,8 +3,8 @@ Contributors: greenshady
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3687060
 Tags: image, images, thumbnail
 Requires at least: 3.2
-Tested up to: 3.2.1
-Stable tag: 0.7
+Tested up to: 3.4
+Stable tag: 0.8
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -55,6 +55,19 @@ To see all methods and options, refer to the `readme.html` file included with th
 You can view this plugin in action on my <a href="http://justintadlock.com" title="Justin Tadlock's blog">personal blog</a> (note the thumbnails).
 
 == Changelog ==
+
+**Version 0.8**
+
+* Inline docs updates.
+* Added the `before` argument to output HTML before the image.
+* Added the `after` argument to output HTML after the image.
+* Added the `thumbnail_id_save` argument to allow the attached image to be saved as the thumbnail/featured image.
+* Get the post ID via `get_the_ID()` rather than the global `$post` object.
+* Fixed debug notice with `$image_html`.
+* Moved the `*_fetch_post_thumbnail_html` hooks into the main function and only fire them if displaying to the screen.
+* Simplified the `meta_key` logic.
+* Completely rewrote the `attachment` logic.
+* Sanitize classes with `sanitize_html_class()`.
 
 **Version 0.7**
 

@@ -50,10 +50,10 @@
 <p>By simply making a function call to <code>&lt;?php get_the_image(); ?></code> within a template file, the script will default to this:</p>
 
 <pre><code>$defaults = array(
-	'meta_key' => array( 'Thumbnail', 'thumbnail' ),
-	'post_id' => $post->ID,
+	'meta_key' => array( 'Thumbnail', 'thumbnail' ), // array|string
+	'post_id' => get_the_ID(),
 	'attachment' => true,
-	'the_post_thumbnail' => true,
+	'the_post_thumbnail' => true, // WP 2.9+ image function
 	'size' => 'thumbnail',
 	'default_image' => false,
 	'order_of_image' => 1,
@@ -64,9 +64,14 @@
 	'height' => false,
 	'format' => 'img',
 	'meta_key_save' => false,
+	'thumbnail_id_save' => false, // Set 'featured image'.
 	'callback' => null,
 	'cache' => true,
-	'echo' => true
+	'before' => '',
+	'after' => '',
+	'echo' => true,
+	'custom_key' => null, // @deprecated 0.6. Use 'meta_key'.
+	'default_size' => null, // @deprecated 0.5.  Use 'size'.
 );</code></pre>
 
 <dl>
@@ -98,10 +103,16 @@
 	<dd>What format to return the image in.  If set to <code>array</code> the return value of the function will be an array of <code>&lt;img></code> attributes.  All other values will return the <code>&lt;img></code> element.</dd>
 	<dt>meta_key_save</dt>
 	<dd>A meta key to save the image <acronym title="Uniform Resource Locator">URL</acronym> as.  This is useful if you're not using custom fields but want to cut back on database queries by having the script automatically set the custom field for you.  By default, this is set to <code>false</code>.</dd>
+	<dt>thumbnail_id_save</dt>
+	<dd>Whether to save the attachment ID as the post thumbnail (featured image) ID if no featured image is set for the post.  By default, this is set to <code>false</code></dd>
 	<dt>callback</dt>
 	<dd>A custom callback function that will be called if set.  It's only called if no images are found by any other options of the plugin.  However, it will be run before the <code>default_image</code> is set.  The <code>$args</code> array is passed to the callback function as the only parameter.</dd>
 	<dt>cache</dt>
 	<dd>Whether to use the WordPress Cache <acronym title="Application Programming Interface">API</acronym> (integrates with caching plugins) to serve the post images.  By default, this is set to <code>true</code>.</dd>
+	<dt>before</dt>
+	<dd><abbr title="Hypertext Markup Language">HTML</abbr> to place before the output of the image.</dd>
+	<dt>after</dt>
+	<dd><abbr title="Hypertext Markup Language">HTML</abbr> to place after the output of the image.</dd>
 	<dt>echo</dt>
 	<dd>If set to <code>true</code>, the image is shown on the page.  If set to <code>false</code>, the image will be returned to use in your own function. (Set to <code>true</code> by default.)</dd>
 </dl>
@@ -174,7 +185,7 @@
 
 <p>Let's suppose you've used this code:</p>
 
-<pre><code>&lt;?php get_the_image( array( 'custom_key' => array( 'Donkey Kong', 'mario' ), 'size' => 'full' ) ); ?></code></pre>
+<pre><code>&lt;?php get_the_image( array( 'meta_key' => array( 'Donkey Kong', 'mario' ), 'size' => 'full' ) ); ?></code></pre>
 
 <p>This will give you these CSS classes to work with:</p>
 
@@ -193,7 +204,7 @@ img.thumbnail { }</code></pre>
 
 <h2>Plugin support</h2>
 
-<p>I run a WordPress community called <a href="http://themehybrid.com" title="Theme Hybrid">Theme Hybrid</a>, which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee ($25 <acronym title="United States Dollars">USD</acronym> at the time of writing).</p>
+<p>I run a WordPress community called <a href="http://themehybrid.com" title="Theme Hybrid">Theme Hybrid</a>, which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee ($29 <acronym title="United States Dollars">USD</acronym> at the time of writing).</p>
 
 <p>I know.  I know.  You might not want to pay for support, but just consider it a donation to the project.  To continue making cool, GPL-licensed plugins and having the time to support them, I must pay the bills.</p>
 
@@ -203,7 +214,7 @@ img.thumbnail { }</code></pre>
 
 <p>This plugin is copyrighted to <a href="http://justintadlock.com" title="Justin Tadlock">Justin Tadlock</a>.</p>
 
-<p>2008&thinsp;&ndash;&thinsp;2011 &copy; Justin Tadlock.  All rights reserved.</p>
+<p>2008&thinsp;&ndash;&thinsp;2012 &copy; Justin Tadlock.  All rights reserved.</p>
 
 </body>
 </html>
