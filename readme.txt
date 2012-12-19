@@ -1,10 +1,10 @@
 === Get the Image ===
 Contributors: greenshady
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3687060
+Donate link: http://themehybrid.com/donate
 Tags: image, images, thumbnail
 Requires at least: 3.2
-Tested up to: 3.4
-Stable tag: 0.8
+Tested up to: 3.5
+Stable tag: 0.8.1
 
 An easy-to-use image script for adding things such as thumbnails and feature images.
 
@@ -13,6 +13,8 @@ An easy-to-use image script for adding things such as thumbnails and feature ima
 *Get the Image* is a plugin that grabs images for you.  It was designed to make the process of things such as adding thumbnails, feature images, and/or other images to your blog much easier, but it's so much more than that.  It is an image-based representation of your WordPress posts.
 
 This is a highly intuitive script that can grab an image by custom field input, WP's post image feature, post attachment, or extracting it from the post's content.
+
+Support for this plugin is handled on the Theme Hybrid <a href="http://themehybrid.com/support">support forums</a>.
 
 == Installation ==
 
@@ -35,7 +37,7 @@ This plugin was created to be a lightweight solution to handle a very powerful n
 = How does it pull images? =
 
 1.  Looks for an image by custom field (one of your choosing).
-1. If no image is added by custom field, check for an image using `the_post_thumbnail()` (WP 2.9's new image feature).
+1. If no image is added by custom field, check for an image using `the_post_thumbnail()` (WordPress featured image).
 1. If no image is found, it grabs an image attached to your post.
 1. If no image is attached, it can extract an image from your post content (off by default).
 1. If no image is found at this point, it will default to an image you set (not set by default).
@@ -55,6 +57,13 @@ To see all methods and options, refer to the `readme.html` file included with th
 You can view this plugin in action on my <a href="http://justintadlock.com" title="Justin Tadlock's blog">personal blog</a> (note the thumbnails).
 
 == Changelog ==
+
+**Version 0.8.1**
+
+* Use correct `$attachment_id` variable instead of `$id`.
+* Pass full `$image` array to the `get_the_image_meta_key_save()` function so that it saves correctly.
+* Only use `before` and `after` arguments if an image is found.
+* General code formatting updated.
 
 **Version 0.8**
 
