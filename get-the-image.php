@@ -178,7 +178,8 @@ function get_the_image( $args = array() ) {
 		foreach ( $atts as $att )
 			$out[ $att['name'] ] = $att['value'];
 
-		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
+		if ( isset( $out['src'] ) )
+			$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
 
 		/* Return the array of attributes. */
 		return $out;
