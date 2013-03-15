@@ -87,6 +87,10 @@ function get_the_image( $args = array() ) {
 	/* Merge the input arguments and the defaults. */
 	$args = wp_parse_args( $args, $defaults );
 
+	/* If there's no post_id, we can'd do anything */
+	if ( empty( $args['post_id'] ) ) 
+		return false;
+
 	/* If $default_size is given, overwrite $size. */
 	if ( !is_null( $args['default_size'] ) )
 		$args['size'] = $args['default_size']; // Deprecated 0.5 in favor of $size
@@ -178,7 +182,8 @@ function get_the_image( $args = array() ) {
 		foreach ( $atts as $att )
 			$out[ $att['name'] ] = $att['value'];
 
-		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
+		if ( isset( $out['src'] ) )
+			$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
 
 		/* Return the array of attributes. */
 		return $out;
@@ -231,7 +236,7 @@ function get_the_image_by_meta_key( $args = array() ) {
 
 	/* If a custom key value has been given for one of the keys, return the image URL. */
 	if ( !empty( $image ) )
-		return array( 'src' => $image );
+		return array( 'src' => $image, 'url' => $image );
 
 	return false;
 }
@@ -261,11 +266,14 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
 	/* Get the attachment image source.  This should return an array. */
 	$image = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 
+	if ( ! $image )
+		return false;
+
 	/* Get the attachment excerpt to use as alt text. */
 	$alt = trim( strip_tags( get_post_field( 'post_excerpt', $post_thumbnail_id ) ) );
 
 	/* Return both the image URL and the post thumbnail ID. */
-	return array( 'src' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
+	return array( 'src' => $image[0], 'url' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
 }
 
 /**
@@ -336,7 +344,7 @@ function get_the_image_by_attachment( $args = array() ) {
 			set_post_thumbnail( $args['post_id'], $attachment_id );
 
 		/* Return the image URL. */
-		return array( 'src' => $image[0], 'alt' => $alt );
+		return array( 'src' => $image[0], 'url' => $image[0], 'alt' => $alt );
 	}
 
 	/* Return false for anything else. */
@@ -359,7 +367,7 @@ function get_the_image_by_scan( $args = array() ) {
 
 	/* If there is a match for the image, return its URL. */
 	if ( isset( $matches ) && !empty( $matches[1][0] ) )
-		return array( 'src' => $matches[1][0] );
+		return array( 'src' => $matches[1][0], 'url' => $matches[1][0] );
 
 	return false;
 }
@@ -374,7 +382,7 @@ function get_the_image_by_scan( $args = array() ) {
  * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_default( $args = array() ) {
-	return array( 'src' => $args['default_image'] );
+	return array( 'src' => $args['default_image'], 'url' => $args['default_image'] );
 }
 
 /**
@@ -411,7 +419,7 @@ function get_the_image_format( $args = array(), $image = false ) {
 
 	/* Add the $size and any user-added $image_class to the class. */
 	$classes[] = sanitize_html_class( $size );
-	$classes[] = sanitize_html_class( $image_class );
+	$classes[] = sanitize_text_field( $image_class );
 
 	/* Join all the classes into a single string and make sure there are no duplicates. */
 	$class = join( ' ', array_unique( $classes ) );
