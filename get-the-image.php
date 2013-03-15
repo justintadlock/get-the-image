@@ -419,7 +419,7 @@ function get_the_image_format( $args = array(), $image = false ) {
 
 	/* Add the $size and any user-added $image_class to the class. */
 	$classes[] = sanitize_html_class( $size );
-	$classes[] = sanitize_html_class( $image_class );
+	$classes[] = sanitize_text_field( $image_class );
 
 	/* Join all the classes into a single string and make sure there are no duplicates. */
 	$class = join( ' ', array_unique( $classes ) );
