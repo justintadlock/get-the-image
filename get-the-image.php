@@ -236,7 +236,7 @@ function get_the_image_by_meta_key( $args = array() ) {
 
 	/* If a custom key value has been given for one of the keys, return the image URL. */
 	if ( !empty( $image ) )
-		return array( 'src' => $image );
+		return array( 'src' => $image, 'url' => $image );
 
 	return false;
 }
@@ -273,7 +273,7 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
 	$alt = trim( strip_tags( get_post_field( 'post_excerpt', $post_thumbnail_id ) ) );
 
 	/* Return both the image URL and the post thumbnail ID. */
-	return array( 'src' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
+	return array( 'src' => $image[0], 'url' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
 }
 
 /**
@@ -344,7 +344,7 @@ function get_the_image_by_attachment( $args = array() ) {
 			set_post_thumbnail( $args['post_id'], $attachment_id );
 
 		/* Return the image URL. */
-		return array( 'src' => $image[0], 'alt' => $alt );
+		return array( 'src' => $image[0], 'url' => $image[0], 'alt' => $alt );
 	}
 
 	/* Return false for anything else. */
@@ -367,7 +367,7 @@ function get_the_image_by_scan( $args = array() ) {
 
 	/* If there is a match for the image, return its URL. */
 	if ( isset( $matches ) && !empty( $matches[1][0] ) )
-		return array( 'src' => $matches[1][0] );
+		return array( 'src' => $matches[1][0], 'url' => $matches[1][0] );
 
 	return false;
 }
@@ -382,7 +382,7 @@ function get_the_image_by_scan( $args = array() ) {
  * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_default( $args = array() ) {
-	return array( 'src' => $args['default_image'] );
+	return array( 'src' => $args['default_image'], 'url' => $args['default_image'] );
 }
 
 /**
