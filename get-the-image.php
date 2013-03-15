@@ -262,6 +262,9 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
 	/* Get the attachment image source.  This should return an array. */
 	$image = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 
+	if ( ! $image )
+		return false;
+
 	/* Get the attachment excerpt to use as alt text. */
 	$alt = trim( strip_tags( get_post_field( 'post_excerpt', $post_thumbnail_id ) ) );
 
