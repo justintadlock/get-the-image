@@ -184,18 +184,6 @@ You will still have the `size` and `meta_key` classes plus your additional class
 	img.custom-image { }
 	img.thumbnail { }
 
-## Support ##
-
-I run a WordPress community called [Theme Hybrid](http://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee ($29 USD at the time of writing).
-
-I know.  I know.  You might not want to pay for support, but just consider it a donation to the project.  To continue making cool, GPL-licensed plugins and having the time to support them, I must pay the bills.
-
-## Copyright and License ##
-
-Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
-
-2008&thinsp;&ndash;&thinsp;2013 &copy; [Justin Tadlock](http://justintadlock.com).
-
 ## Changelog ##
 
 ### Version 0.9.0 ###
@@ -204,7 +192,7 @@ Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-li
 
 * Caption support. FTW!
 * Multiple image classes now allowed via the `image_class` argument.
-* Use current theme's `post-thumbnail` as default image size if set it via `set_post_thumbnail_size()`.
+* Use current theme's `post-thumbnail` as default image size if set via `set_post_thumbnail_size()`.
 
 #### Bug fixes:
 
@@ -220,7 +208,7 @@ Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-li
 * Only use `before` and `after` arguments if an image is found.
 * General code formatting updated.
 
-#### Version 0.8 ####
+### Version 0.8 ###
 
 * Inline docs updates.
 * Added the `before` argument to output HTML before the image.
@@ -293,6 +281,18 @@ Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-li
 
 * Changed methods of calling the image script.
 * Added more parameters.
+
+## Support ##
+
+I run a WordPress community called [Theme Hybrid](http://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee ($29 USD at the time of writing).
+
+I know.  I know.  You might not want to pay for support, but just consider it a donation to the project.  To continue making cool, GPL-licensed plugins and having the time to support them, I must pay the bills.
+
+## Copyright and License ##
+
+Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
+
+2008&thinsp;&ndash;&thinsp;2013 &copy; [Justin Tadlock](http://justintadlock.com).
 
 *[API]: Application Programming Interface
 *[CSS]: Cascading Style Sheets
