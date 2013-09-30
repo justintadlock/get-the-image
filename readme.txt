@@ -50,7 +50,9 @@ To see all methods and options, refer to the `readme.md` file included with the 
 
 == Screenshots ==
 
-You can view this plugin in action on my <a href="http://justintadlock.com" title="Justin Tadlock's blog">personal blog</a> (note the thumbnails).
+1. Slider plus thumbnails.
+2. Portfolio images.
+3. Gallery-style thumbnails.
 
 == Changelog ==
 
