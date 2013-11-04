@@ -701,122 +701,114 @@ function get_the_image_delete_cache_by_meta( $meta_id, $post_id ) {
 	wp_cache_delete( $post_id, 'get_the_image' );
 }
 
+
+/* === Deprecated functions === */
+
+
 /**
- * @since 0.1.0
+ * @since      0.1.0
  * @deprecated 0.3.0
+ * @access     public
  */
-function get_the_image_link( $deprecated = '', $deprecated_2 = '', $deprecated_3 = '' ) {
-	get_the_image();
+function get_the_image_link() {
+	_deprecated_function( __FUNCTION__, '0.3.0', 'get_the_image' );
+	get_the_image( array( 'link_to_post' => true ) );
 }
 
 /**
- * @since 0.3.0
+ * @since      0.3.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function image_by_custom_field( $args = array() ) {
-	return get_the_image_by_meta_key( $args );
-}
+function image_by_custom_field() {}
 
 /**
- * @since 0.4.0
+ * @since      0.4.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function image_by_the_post_thumbnail( $args = array() ) {
-	return get_the_image_by_post_thumbnail( $args );
-}
+function image_by_the_post_thumbnail() {}
 
 /**
- * @since 0.3.0
+ * @since      0.3.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function image_by_attachment( $args = array() ) {
-	return get_the_image_by_attachment( $args );
-}
+function image_by_attachment() {}
 
 /**
- * @since 0.3.0
+ * @since      0.3.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function image_by_scan( $args = array() ) {
-	return get_the_image_by_scan( $args );
-}
+function image_by_scan() {}
 
 /**
- * @since 0.3.0
+ * @since      0.3.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function image_by_default( $args = array() ) {
-	return get_the_image_by_default( $args );
-}
+function image_by_default() {}
 
 /**
- * @since 0.1.0
+ * @since      0.1.0
  * @deprecated 0.7.0
+ * @access     private
  */
-function display_the_image( $args = array(), $image = false ) {
-	return get_the_image_format( $args, $image );
-}
+function display_the_image() {}
 
 /**
- * @since 0.5.0
- * @deprecated 0.7.0 Replaced by cache delete functions specifically for the post ID.
+ * @since      0.5.0
+ * @deprecated 0.7.0
+ * @access     private
  */
-function get_the_image_delete_cache() {
-	return;
-}
+function get_the_image_delete_cache() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_by_meta_key( $args = array() ) {
-}
+function get_the_image_by_meta_key() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_by_post_thumbnail( $args = array() ) {
-}
+function get_the_image_by_post_thumbnail() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_by_attachment( $args = array() ) {
-}
+function get_the_image_by_attachment() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_by_scan( $args = array() ) {
-}
+function get_the_image_by_scan() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_by_default( $args = array() ) {
-}
+function get_the_image_by_default() {}
 
 /**
  * @since      0.7.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_format( $args = array(), $image = false ) {
-}
+function get_the_image_format() {}
 
 /**
  * @since      0.6.0
  * @deprecated 1.0.0
  * @access     private
  */
-function get_the_image_meta_key_save( $args = array(), $image = array() ) {
-}
+function get_the_image_meta_key_save() {}
