@@ -362,28 +362,48 @@ final class Get_The_Image {
 			$attachment_id = $this->args['post_id'];
 		}
 
-		/* If the post is not an attachment, check if it has any image attachments. */
+		/* If viewing a non-image attachment (sub-attachments). */
+		elseif ( 'attachment' === get_post_type( $args['post_id'] ) ) {
+
+			/* Get attachments for the inputted $post_id. */
+			$attachments = get_posts(
+				array(
+					'numberposts'      => 1,
+					'post_parent'      => $args['post_id'],
+					'post_status'      => 'inherit',
+					'post_type'        => 'attachment',
+					'post_mime_type'   => 'image',
+					'order'            => 'ASC',
+					'orderby'          => 'menu_order ID',
+					'suppress_filters' => true,
+					'fields'           => 'ids'
+				)
+			);
+
+			if ( !empty( $attachments ) )
+				$attachment_id = array_shift( $attachments );
+		}
+
+		/* If the post is not an image attachment, check if it has any image attachments. */
 		else {
 
 			/* Get attachments for the inputted $post_id. */
 			$attachments = get_children(
 				array(
+					'numberposts'      => 1,
 					'post_parent'      => $this->args['post_id'],
 					'post_status'      => 'inherit',
 					'post_type'        => 'attachment',
 					'post_mime_type'   => 'image',
 					'order'            => 'ASC',
 					'orderby'          => 'menu_order ID',
-					'suppress_filters' => true
+					'fields'           => 'ids'
 				)
 			);
 
 			/* Check if any attachments were found. */
-			if ( !empty( $attachments ) ) {
-				$_attachment = array_shift( $attachments );
-
-				$attachment_id = $_attachment->ID;
-			}
+			if ( !empty( $attachments ) )
+				$attachment_id = array_shift( $attachments );
 		}
 
 		if ( !empty( $attachment_id ) )
