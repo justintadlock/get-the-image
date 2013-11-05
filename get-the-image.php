@@ -256,7 +256,7 @@ final class Get_The_Image {
 
 		/* If there is a $post_thumbnail_id, do the actions associated with get_the_post_thumbnail(). */
 		if ( isset( $this->image_args['post_thumbnail_id'] ) )
-			do_action( 'begin_fetch_post_thumbnail_html', $this->args['post_id'], $this->image_args['post_thumbnail_id'], $this->arg['size'] );
+			do_action( 'begin_fetch_post_thumbnail_html', $this->args['post_id'], $this->image_args['post_thumbnail_id'], $this->args['size'] );
 
 		/* Display the image if we get to this point. */
 		echo !empty( $image_html ) ? $this->args['before'] . $image_html . $this->args['after'] : $image_html;
