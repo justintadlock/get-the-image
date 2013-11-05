@@ -175,10 +175,10 @@ final class Get_The_Image {
 		);
 
 		/* Allow plugins/themes to filter the arguments. */
-		$this->args = apply_filters( 'get_the_image_args', $this->args );
-
-		/* Merge the input arguments and the defaults. */
-		$this->args = wp_parse_args( $args, $defaults );
+		$this->args = apply_filters(
+			'get_the_image_args',
+			wp_parse_args( $this->args, $defaults )
+		);
 
 		/* If no post ID, return. */
 		if ( empty( $this->args['post_id'] ) )
