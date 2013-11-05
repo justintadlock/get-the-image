@@ -54,7 +54,7 @@ function get_the_image( $args = array() ) {
 
 	$image = new Get_The_Image( $args );
 
-	return $image->get_image();
+	$image->get_image();
 }
 
 
@@ -521,14 +521,13 @@ final class Get_The_Image {
 							if ( preg_match( '#.*?[\s]caption=[\'"](.+?)[\'"]#i', $shortcode[0], $caption_matches ) )
 								$image_caption = trim( $caption_matches[1] );
 
-							$this->args = array(
+							$caption_args = array(
 								'width'   => $image_src[1],
 								'align'   => 'center'
 							);
 
 							if ( !empty( $image_caption ) )
-								$this->args['caption'] = $image_caption;
-
+								$caption_args['caption'] = $image_caption;
 
 							/* Set up the patterns for the 'src', 'width', and 'height' attributes. */
 							$patterns = array(
@@ -547,7 +546,7 @@ final class Get_The_Image {
 							/* Filter the image attributes. */
 							$shortcode_content = preg_replace( $patterns, $replacements, $shortcode[5] );
 
-							$this->image          = img_caption_shortcode( $this->args, $shortcode_content );
+							$this->image          = img_caption_shortcode( $caption_args, $shortcode_content );
 							$this->original_image = $shortcode[0];
 							return;
 						}
