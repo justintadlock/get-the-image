@@ -451,10 +451,10 @@ final class Get_The_Image {
 	public function get_scan_image() {
 
 		/* Get the post content. */
-		$content = get_post_field( 'post_content', $this->args['post_id'] );
+		$post_content = get_post_field( 'post_content', $this->args['post_id'] );
 
 		/* Check the content for `id="wp-image-%d"`. */
-		preg_match( '/id=[\'"]wp-image-([\d]*)[\'"]/i', $content, $image_ids, PREG_SET_ORDER );
+		preg_match( '/id=[\'"]wp-image-([\d]*)[\'"]/i', $post_content, $image_ids );
 
 		/* Loop through any found image IDs. */
 		if ( is_array( $image_ids ) ) {
@@ -463,12 +463,12 @@ final class Get_The_Image {
 				$this->_get_image_attachment( $image_id );
 
 				if ( !empty( $this->image_args ) )
-					break;
+					return;
 			}
 		}
 
 		/* Search the post's content for the <img /> tag and get its URL. */
-		preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $content, $matches );
+		preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $post_content, $matches );
 
 		/* If there is a match for the image, set the image args. */
 		if ( isset( $matches ) && !empty( $matches[1][0] ) )
