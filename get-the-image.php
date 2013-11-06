@@ -670,7 +670,7 @@ final class Get_The_Image {
 		$class = join( ' ', $classes );
 
 		/* Add the image attributes to the <img /> element. */
-		$html = sprintf( '<img src="%s" alt="%s" class="%s"%s />', esc_attr( $this->image_args['src'] ), esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
+		$html = sprintf( '<img src="%s" alt="%s" class="%s"%s itemprop="image" />', esc_attr( $this->image_args['src'] ), esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
 
 		/* If $link_to_post is set to true, link the image to its post. */
 		if ( $this->args['link_to_post'] )
