@@ -54,7 +54,7 @@ function get_the_image( $args = array() ) {
 
 	$image = new Get_The_Image( $args );
 
-	$image->get_image();
+	return $image->get_image();
 }
 
 
