@@ -643,6 +643,19 @@ final class Get_The_Image {
 		/* If there is alt text, set it.  Otherwise, default to the post title. */
 		$image_alt = !empty( $this->image_args['alt'] ) ? $this->image_args['alt'] : get_post_field( 'post_title', $this->args['post_id'] );
 
+		/* If there's a width/height for the image. */
+		if ( isset( $this->image_args['width'] ) && isset( $this->image_args['height'] ) ) {
+
+			/* Set a class based on the orientation. */
+			$classes[] = ( $this->image_args['height'] > $this->image_args['width'] ) ? 'portrait' : 'landscape';
+
+			/* If an explicit width/height is not set, use the info from the image. */
+			if ( empty( $this->args['width'] ) && empty( $this->args['height'] ) ) {
+				$this->args['width']  = $this->image_args['width'];
+				$this->args['height'] = $this->image_args['height'];
+			}
+		}
+
 		/* If there is a width or height, set them as HMTL-ready attributes. */
 		$width  = $this->args['width']  ? ' width="' .  esc_attr( $this->args['width']  ) . '"' : '';
 		$height = $this->args['height'] ? ' height="' . esc_attr( $this->args['height'] ) . '"' : '';
