@@ -164,7 +164,10 @@ function get_the_image( $args = array() ) {
 		/* If no image found and a $default_image is set, get the default image. */
 		if ( empty( $image ) && !empty( $default_image ) )
 			$image = get_the_image_by_default( $args );
-
+			
+		/* Allow plugins/theme to override the final image source array. */
+		$image = apply_filters( 'get_the_image_source', $image, $args );
+	
 		/* If an image was found. */
 		if ( !empty( $image ) ) {
 
