@@ -119,6 +119,11 @@ final class Get_The_Image {
 	 * @return void
 	 */
 	public function __construct( $args = array() ) {
+		global $wp_embed;
+
+		/* Use WP's embed functionality to handle the [embed] shortcode and autoembeds. */
+		add_filter( 'get_the_image_post_content', array( $wp_embed, 'run_shortcode' ) );
+		add_filter( 'get_the_image_post_content', array( $wp_embed, 'autoembed'     ) );
 
 		/* Set the default arguments. */
 		$defaults = array(
@@ -216,7 +221,7 @@ final class Get_The_Image {
 
 		/* Only used if $original_image is set. */
 		if ( true === $this->args['split_content'] && !empty( $this->original_image ) )
-			add_filter( 'the_content', array( $this, 'split_content' ), 1 );
+			add_filter( 'the_content', array( $this, 'split_content' ), 15 );
 	}
 
 	/**
@@ -452,6 +457,9 @@ final class Get_The_Image {
 		/* Get the post content. */
 		$post_content = get_post_field( 'post_content', $this->args['post_id'] );
 
+		/* Apply filters to content. */
+		$post_content = apply_filters( 'get_the_image_post_content', $post_content );
+
 		/* Check the content for `id="wp-image-%d"`. */
 		preg_match( '/id=[\'"]wp-image-([\d]*)[\'"]/i', $post_content, $image_ids );
 
@@ -496,6 +504,9 @@ final class Get_The_Image {
 
 		/* Get the post content. */
 		$post_content = get_post_field( 'post_content', $this->args['post_id'] );
+
+		/* Apply filters to content. */
+		$post_content = apply_filters( 'get_the_image_post_content', $post_content );
 
 		/* Finds matches for shortcodes in the content. */
 		preg_match_all( '/' . get_shortcode_regex() . '/s', $post_content, $matches, PREG_SET_ORDER );
