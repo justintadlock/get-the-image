@@ -157,6 +157,10 @@ final class Get_The_Image {
 			'before'             => '',
 			'after'              => '',
 
+			/* Minimum allowed sizes. */
+			'min_width'          => 0,
+			'min_height'         => 0,
+
 			/* Captions. */
 			'caption'            => false, // Default WP [caption] requires a width.
 
@@ -645,6 +649,14 @@ final class Get_The_Image {
 
 		/* If there is no image URL, return false. */
 		if ( empty( $this->image_args['src'] ) )
+			return;
+
+		/* Check against min. width. If the image width is too small return. */
+		if ( 0 < $this->args['min_width'] && isset( $this->image_args['width'] ) && $this->image_args['width'] < $this->args['min_width'] )
+			return;
+
+		/* Check against min. height. If the image height is too small return. */
+		if ( 0 < $this->args['min_height'] && isset( $this->image_args['height'] ) && $this->image_args['height'] < $this->args['min_height'] )
 			return;
 
 		/* Empty classes array. */
