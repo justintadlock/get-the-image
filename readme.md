@@ -4,7 +4,7 @@ Get the Image is a plugin that grabs images for you.  It was designed to make th
 
 ## What the plugin does ##
 
-This plugin was made to easily get an image related to a post.  This is the method order in which the plugin attempts to grab an image.
+This plugin was made to easily get an image related to a post.  This is the default method order in which the plugin attempts to grab an image.
 
 * Meta key (custom field).
 * Post thumbnail (WP featured image).
@@ -33,17 +33,23 @@ The `get_the_image()` function accepts a single parameter of `$args`, which is a
 		/* Post the image is associated with. */
 		'post_id'            => get_the_ID(),
 
+		/* Method order (see methods below). */
+		'order'              => array( 'meta_key', 'featured', 'attachment', 'scan', 'scan_raw', 'callback', 'default' ),
+
 		/* Methods of getting an image (in order). */
 		'meta_key'           => array( 'Thumbnail', 'thumbnail' ), // array|string
-		'the_post_thumbnail' => true,
+		'featured'           => true,
 		'attachment'         => true,
-		'image_scan'         => false,
+		'scan'               => false,
+		'scan_raw'           => false, // Note: don't use the array format option with this.
 		'callback'           => null,
-		'default_image'      => false,
+		'default'            => false,
+
+		/* Split image from post content (by default, only used with the 'scan_raw' option). */
+		'split_content'      => false,
 
 		/* Attachment-specific arguments. */
-		'size'               => isset( $_wp_additional_image_sizes['post-thumbnail'] ) ? 'post-thumbnail' : 'thumbnail',
-		'order_of_image'     => 1,
+		'size'               => has_image_size( 'post-thumbnail' ) ? 'post-thumbnail' : 'thumbnail',
 
 		/* Format/display of image. */
 		'link_to_post'       => true,
@@ -53,42 +59,55 @@ The `get_the_image()` function accepts a single parameter of `$args`, which is a
 		'before'             => '',
 		'after'              => '',
 
+		/* Minimum allowed sizes. */
+		'min_width'          => 0,
+		'min_height'         => 0,
+
 		/* Captions. */
 		'caption'            => false, // Default WP [caption] requires a width.
 
 		/* Saving the image. */
-		'meta_key_save'      => false,
+		'meta_key_save'      => false, // Save as metadata (string).
 		'thumbnail_id_save'  => false, // Set 'featured image'.
-		'cache'              => true,
+		'cache'              => true,  // Cache the image.
 
 		/* Return/echo image. */
 		'format'             => 'img',
 		'echo'               => true,
 
 		/* Deprecated arguments. */
-		'custom_key'         => null, // @deprecated 0.6. Use 'meta_key'.
-		'default_size'       => null, // @deprecated 0.5.  Use 'size'.
+		'custom_key'         => null, // @deprecated 0.6.0 Use 'meta_key'.
+		'default_size'       => null, // @deprecated 0.5.0 Use 'size'.
+		'the_post_thumbnail' => null, // @deprecated 1.0.0 Use 'featured'.
+		'image_scan'         => null, // @deprecated 1.0.0 Use 'scan' or 'scan_raw'.
+		'default_image'      => null, // @deprecated 1.0.0 Use 'default'.
+		'order_of_image'     => null, // @deprecated 1.0.0 No replacement.
 	);
 
 * `post_id` - The ID of the post to get the image for.  This defaults to the current post in the loop.
+* `order` - Order of methods used to grab images. Defaults to `array( 'meta_key', 'featured', 'attachment', 'scan', 'scan_raw', 'callback', 'default' )`.
 * `meta_key` - This parameter refers to post meta keys (custom fields) that you use.  Remember, meta keys are case-sensitive (defaults are `Thumbnail` and `thumbnail`).  By default, this is an array of meta keys, but it can also be a string for a single meta key.
+* `featured` - This refers to the `the_post_thumbnail()` WordPress function. By having this set to `true`, you may select an image from the featured image meta box while on the edit post screen.
 * `attachment` - The script will look for images attached to the post (set to `true` by default).
-* `the_post_thumbnail` - This refers to the `the_post_thumbnail()` WordPress function. By having this set to `true`, you may select an image from the featured image meta box while on the edit post screen.
-* `size` - This refers to the size of an attached image.  You can choose between `thumbnail`, `medium`, `large`, `full`, or any custom image size you have available (the default is `thumbnail`).
-* `default_image` - Will take the input of an image URL and use it if no other images are found (no default set).
-* `order_of_image` - You can choose for the script to grab something other than the first attached image. This only refers to image attachments.
+* `scan` - If set to `true`, the script will search within your post for an image that's been added.
+* `scan_raw` - If set to `true`, the script will search within your post for an image and pull the raw HTML for that image.
+* `callback` - A custom callback function that will be called if set.  It's only called if no images are found by any other options of the plugin.  However, it will be run before the `default` is set.  The `$args` array is passed to the callback function as the only parameter.
+* `default` - Will take the input of an image URL and use it if no other images are found (no default set).
+* `split_content` - Whether to split the raw HTML of the found image from the post content. Default is `false`. This method is only used with the `scan_raw` method.
+* `size` - This refers to the size of an attached image.  You can choose between `thumbnail`, `medium`, `large`, `full`, or any custom image size you have available (the default is `thumbnail` or `post-thumbnail` if theme has set a thumbnail size).
 * `link_to_post` - Whether the image shown should be linked to the post (set to `true` by default).
 * `image_class` - You can give an additional class to the image for use in your CSS.
-* `image_scan` - If set to `true`, the script will search within your post for an image that's been added.
 * `width` - Set the width of the image on output.
 * `height` - Set the height of the image on output.
-* `format` - What format to return the image in.  If set to `array` the return value of the function will be an array of `<img>` attributes.  All other values will return the `<img>` element.
-* `meta_key_save` - A meta key to save the image URL as.  This is useful if you're not using custom fields but want to cut back on database queries by having the script automatically set the custom field for you.  By default, this is set to `false`.
-* `thumbnail_id_save` - Whether to save the attachment ID as the post thumbnail (featured image) ID if no featured image is set for the post.  By default, this is set to `false`
-* `callback` - A custom callback function that will be called if set.  It's only called if no images are found by any other options of the plugin.  However, it will be run before the `default_image` is set.  The `$args` array is passed to the callback function as the only parameter.
-* `cache` - Whether to use the WordPress Cache API (integrates with caching plugins) to serve the post images.  By default, this is set to `true`.
 * `before` - HTML to place before the output of the image.
 * `after` - HTML to place after the output of the image.
+* `min_width` - Minimum width of the image to get.  This won't work with the `scan*` methods. Defaults to `0`.
+* `min_height` - Minimum height of the image to get.  This won't work with the `scan*` methods. Defaults to `0`.
+* `caption` - Whether to display the image caption if it exists.  Defaults to `false`.
+* `meta_key_save` - A meta key to save the image URL as.  This is useful if you're not using custom fields but want to cut back on database queries by having the script automatically set the custom field for you.  By default, this is set to `false`.
+* `thumbnail_id_save` - Whether to save the attachment ID as the post thumbnail (featured image) ID if no featured image is set for the post.  By default, this is set to `false`
+* `cache` - Whether to use the WordPress Cache API (integrates with caching plugins) to serve the post images.  By default, this is set to `true`.
+* `format` - What format to return the image in.  If set to `array` the return value of the function will be an array of `<img>` attributes.  All other values will return the `<img>` element.
 * `echo` - If set to `true`, the image is shown on the page.  If set to `false`, the image will be returned to use in your own function. (Set to `true` by default.)
 
 ### Some usage examples ##
@@ -119,7 +138,7 @@ If you want to have a sort of fallback image, then you can set an image for the 
 
 You can even make the script scan for images that have been added to your post with this:
 
-	<?php get_the_image( array( 'image_scan' => true ) ); ?>
+	<?php get_the_image( array( 'scan' => true ) ); ?>
 
 #### Example 5 ####
 
@@ -186,15 +205,38 @@ You will still have the `size` and `meta_key` classes plus your additional class
 
 ## Changelog ##
 
+### Version 1.0.0 ###
+
+#### General Changes: ####
+
+* `the_post_thumbnail` argument deprecated in favor of `featured`.
+* `image_scan` argument deprecated in favor of `scan` or `scan_raw`.
+* `default_image` argument deprecated in favor of `default`.
+* `order_of_image` argument removed with no replacement.
+
+#### Enhancements: ####
+
+* Re-coded how the image script works by encapsulating the functionality into a single class rather than multiple functions. This makes it much easier to reuse code and paves the way for more improvements in the future.
+* New `scan_raw` argument for pulling an image (straight HTML) directly from the post content.
+* New `split_content` argument for removing an image from the post content if one is found. Used only in conjunction with the `scan_raw` argument.
+* New `order` argument for changing the order in which the script looks for images.
+* Better support and handling for sub-attachments (e.g., featured images for audio/video attachments).
+* Support for Schema.org microdata.  `itemprop="image"` attribute added to image outputs where possible.
+* New image orientation class if the width and height are available. Class can be `landscape` or `portrait`.
+* Default image size is `post-thumbnail` if the theme has set this size. Otherwise, `thumbnail` is the default size.
+* Supports the ability to get embedded images via WordPress' image embeds (Instagram, Flickr, etc.) via the `scan*` methods.
+* New filter hook: `get_the_image_post_content`. Used when checking the post content.
+* Added `min_width` and `min_height` arguments (doesn't work with `scan*` methods).
+
 ### Version 0.9.0 ###
 
-#### Enhancements:
+#### Enhancements: ####
 
 * Caption support. FTW!
 * Multiple image classes now allowed via the `image_class` argument.
 * Use current theme's `post-thumbnail` as default image size if set via `set_post_thumbnail_size()`.
 
-#### Bug fixes:
+#### Bug fixes: ####
 
 * Use the WordPress-saved attachment alt text for the image.
 * Only add `$out['src']` if `$out['url']` is set when returning as an array.
@@ -284,7 +326,7 @@ You will still have the `size` and `meta_key` classes plus your additional class
 
 ## Support ##
 
-I run a WordPress community called [Theme Hybrid](http://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee ($29 USD at the time of writing).
+I run a WordPress community called [Theme Hybrid](http://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee.
 
 I know.  I know.  You might not want to pay for support, but just consider it a donation to the project.  To continue making cool, GPL-licensed plugins and having the time to support them, I must pay the bills.
 
@@ -292,12 +334,4 @@ I know.  I know.  You might not want to pay for support, but just consider it a 
 
 Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-2008&thinsp;&ndash;&thinsp;2013 &copy; [Justin Tadlock](http://justintadlock.com).
-
-*[API]: Application Programming Interface
-*[CSS]: Cascading Style Sheets
-*[FTW]: For The Win
-*[GPL]: General Public License
-*[HTML]: Hypertext Markup Language
-*[URL]: Uniform Resource Locator
-*[USD]: United States Dollars
+2008&thinsp;&ndash;&thinsp;2014 &copy; [Justin Tadlock](http://justintadlock.com).
