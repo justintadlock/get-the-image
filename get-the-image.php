@@ -3,7 +3,7 @@
  * Plugin Name: Get The Image
  * Plugin URI:  http://themehybrid.com/plugins/get-the-image
  * Description: This is a highly intuitive script that can grab an image by custom field, featured image, post attachment, or extracting it from the post's content.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Justin Tadlock
  * Author URI:  http://justintadlock.com
  */
@@ -25,7 +25,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   GetTheImage
- * @version   1.0.0
+ * @version   1.0.1
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2014, Justin Tadlock
  * @link      http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
@@ -225,7 +225,7 @@ final class Get_The_Image {
 
 		/* Only used if $original_image is set. */
 		if ( true === $this->args['split_content'] && !empty( $this->original_image ) )
-			add_filter( 'the_content', array( $this, 'split_content' ), 15 );
+			add_filter( 'the_content', array( $this, 'split_content' ), 9 );
 	}
 
 	/**
@@ -794,7 +794,7 @@ final class Get_The_Image {
 	 */
 	public function split_content( $content ) {
 
-		remove_filter( 'the_content', array( $this, 'split_content' ), 1 );
+		remove_filter( 'the_content', array( $this, 'split_content' ), 9 );
 
 		return str_replace( $this->original_image, '', $content );
 	}
