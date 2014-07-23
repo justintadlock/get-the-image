@@ -4,7 +4,7 @@ Contributors: greenshady
 Donate link: http://themehybrid.com/donate
 Tags: image, images, thumbnail
 Requires at least: 3.9
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ To see all methods and options, refer to the `readme.md` file included with the 
 3. Gallery-style thumbnails.
 
 == Changelog ==
+
+### Version 1.0.1 ###
+
+* Changed priority of `split_content` filter to make sure images are split from the content.
 
 ### Version 1.0.0 ###
 

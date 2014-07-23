@@ -205,6 +205,10 @@ You will still have the `size` and `meta_key` classes plus your additional class
 
 ## Changelog ##
 
+### Version 1.0.1 ###
+
+* Changed priority of `split_content` filter to make sure images are split from the content.
+
 ### Version 1.0.0 ###
 
 #### General Changes: ####
