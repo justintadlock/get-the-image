@@ -225,7 +225,7 @@ final class Get_The_Image {
 
 		/* Only used if $original_image is set. */
 		if ( true === $this->args['split_content'] && !empty( $this->original_image ) )
-			add_filter( 'the_content', array( $this, 'split_content' ), 15 );
+			add_filter( 'the_content', array( $this, 'split_content' ), 9 );
 	}
 
 	/**
@@ -794,7 +794,7 @@ final class Get_The_Image {
 	 */
 	public function split_content( $content ) {
 
-		remove_filter( 'the_content', array( $this, 'split_content' ), 1 );
+		remove_filter( 'the_content', array( $this, 'split_content' ), 9 );
 
 		return str_replace( $this->original_image, '', $content );
 	}
