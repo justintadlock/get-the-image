@@ -617,6 +617,10 @@ final class Get_The_Image {
 		/* Get the attachment image. */
 		$image = wp_get_attachment_image_src( $attachment_id, $this->args['size'] );
 
+		/* If no image was found, return. */
+		if ( false === $image )
+			return;
+
 		/* Get the attachment alt text. */
 		$alt = trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
 
