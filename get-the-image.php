@@ -464,14 +464,18 @@ final class Get_The_Image {
 		/* Apply filters to content. */
 		$post_content = apply_filters( 'get_the_image_post_content', $post_content );
 
-		/* Check the content for `id="wp-image-%d"`. */
-		preg_match( '/id=[\'"]wp-image-([\d]*)[\'"]/i', $post_content, $image_ids );
+		/* Check the content for `id="wp-image-%d` and `class=".*wp-image-%d.*"`. */
+		preg_match( '/id=[\'"]wp-image([\d]*)[\'"]|class=[\'"].*wp-image-([\d]*).*[\'"]/i', $post_content, $image_ids );
 
 		/* Loop through any found image IDs. */
 		if ( is_array( $image_ids ) ) {
 
 			foreach ( $image_ids as $image_id ) {
-				$this->_get_image_attachment( $image_id );
+				$image_id = absint ( $image_id );
+
+				/* Try to get an image only when we have a valid id */
+				if ( $image_id > 0 )
+					$this->_get_image_attachment( $image_id );
 
 				if ( !empty( $this->image_args ) )
 					return;
