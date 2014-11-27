@@ -471,7 +471,11 @@ final class Get_The_Image {
 		if ( is_array( $image_ids ) ) {
 
 			foreach ( $image_ids as $image_id ) {
-				$this->_get_image_attachment( $image_id );
+				$image_id = absint ( $image_id );
+
+				/* Try to get an image only when we have a valid id */
+				if ( $image_id > 0 )
+					$this->_get_image_attachment( $image_id );
 
 				if ( !empty( $this->image_args ) )
 					return;
