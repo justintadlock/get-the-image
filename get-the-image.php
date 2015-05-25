@@ -111,6 +111,15 @@ final class Get_The_Image {
 	public $original_image = '';
 
 	/**
+	 * Holds an array of srcset sources and descriptors.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @var    array
+	 */
+	public $srcsets = array();
+
+	/**
 	 * Constructor method.  This sets up and runs the show.
 	 *
 	 * @since  1.0.0
@@ -148,6 +157,9 @@ final class Get_The_Image {
 
 			/* Attachment-specific arguments. */
 			'size'               => has_image_size( 'post-thumbnail' ) ? 'post-thumbnail' : 'thumbnail',
+
+			// Key (image size) / Value ( width or px-density descriptor) pairs (e.g., 'large' => '2x' )
+			'srcset_sizes'       => array(),
 
 			/* Format/display of image. */
 			'link_to_post'       => true,
@@ -635,6 +647,35 @@ final class Get_The_Image {
 			'alt'     => $alt, 
 			'caption' => $caption 
 		);
+
+		// Get the image srcset sizes.
+		$this->get_srcset( $attachment_id );
+	}
+
+	/**
+	 * Adds array of srcset image sources and descriptors based on the `srcset_sizes` argument
+	 * provided by the developer.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @param  int     $attachment_id
+	 * @return void
+	 */
+	public function get_srcset( $attachment_id ) {
+
+		// Bail if no sizes set.
+		if ( empty( $this->args['srcset_sizes'] ) )
+			return;
+
+		foreach ( $this->args['srcset_sizes'] as $size => $descriptor ) {
+
+			$image = wp_get_attachment_image_src( $attachment_id, $size );
+
+			// Make sure image doesn't match the image used for the `src` attribute.
+			// This will happen often if the particular image size doesn't exist.
+			if ( $this->image_args['src'] !== $image[0] )
+				$this->srcsets[] = sprintf( "%s %s", esc_url( $image[0] ), esc_attr( $descriptor ) );
+		}
 	}
 
 	/**
@@ -682,6 +723,9 @@ final class Get_The_Image {
 		$width  = $this->args['width']  ? ' width="' .  esc_attr( $this->args['width']  ) . '"' : '';
 		$height = $this->args['height'] ? ' height="' . esc_attr( $this->args['height'] ) . '"' : '';
 
+		// srcset attribute
+		$srcset = !empty( $this->srcsets ) ? sprintf( ' srcset="%s"', esc_attr( join( ', ', $this->srcsets ) ) ) : '';
+
 		/* Add the meta key(s) to the classes array. */
 		if ( !empty( $this->args['meta_key'] ) )
 			$classes = array_merge( $classes, (array)$this->args['meta_key'] );
@@ -705,7 +749,7 @@ final class Get_The_Image {
 		$class = join( ' ', $classes );
 
 		/* Add the image attributes to the <img /> element. */
-		$html = sprintf( '<img src="%s" alt="%s" class="%s"%s itemprop="image" />', esc_attr( $this->image_args['src'] ), esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
+		$html = sprintf( '<img src="%s"%s alt="%s" class="%s"%s itemprop="image" />', esc_attr( $this->image_args['src'] ), $srcset, esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
 
 		/* If $link_to_post is set to true, link the image to its post. */
 		if ( $this->args['link_to_post'] )
