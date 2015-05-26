@@ -163,6 +163,7 @@ final class Get_The_Image {
 
 			// Format/display of image.
 			'link'               => 'post', // string|bool - 'post' (true), 'file', 'attachment', false
+			'link_class'         => '',
 			'image_class'        => false,
 			'width'              => false,
 			'height'             => false,
@@ -769,8 +770,12 @@ final class Get_The_Image {
 			elseif ( 'attachment' === $this->args['link'] && isset( $this->image_args['id'] ) )
 				$url = get_permalink( $this->image_args['id'] );
 
-			if ( !empty( $url ) )
-				$html = sprintf( '<a href="%s">%s</a>', esc_url( $url ), $html );
+			if ( !empty( $url ) ) {
+
+				$link_class = $this->args['link_class'] ? sprintf( ' class="%s"', esc_attr( $this->args['link_class'] ) ) : '';
+
+				$html = sprintf( '<a href="%s"%s>%s</a>', esc_url( $url ), $link_class, $html );
+			}
 		}
 
 		// If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail().
