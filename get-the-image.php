@@ -162,7 +162,7 @@ final class Get_The_Image {
 			'srcset_sizes'       => array(),
 
 			// Format/display of image.
-			'link_to_post'       => true,
+			'link'               => 'post', // string|bool - 'post' (true), 'file', 'attachment', false
 			'image_class'        => false,
 			'width'              => false,
 			'height'             => false,
@@ -192,6 +192,7 @@ final class Get_The_Image {
 			'image_scan'         => null, // @deprecated 1.0.0 Use 'scan' or 'scan_raw'.
 			'default_image'      => null, // @deprecated 1.0.0 Use 'default'.
 			'order_of_image'     => null, // @deprecated 1.0.0 No replacement.
+			'link_to_post'       => null, // @deprecated 1.1.0 Use 'link'.
 		);
 
 		// Allow plugins/themes to filter the arguments.
@@ -226,11 +227,15 @@ final class Get_The_Image {
 		if ( !is_null( $this->args['default_image'] ) )
 			$this->args['default'] = $this->args['default_image'];
 
+		// If 'link_to_post' is set, overwrite 'link'.
+		if ( !is_null( $this->args['link_to_post'] ) )
+			$this->args['link'] = true === $this->args['link_to_post'] ? 'post' : false;
+
 		/* === End deprecated arguments. === */
 
 		// If $format is set to 'array', don't link to the post.
 		if ( 'array' == $this->args['format'] )
-			$this->args['link_to_post'] = false;
+			$this->args['link'] = false;
 
 		// Find images.
 		$this->find();
@@ -641,6 +646,7 @@ final class Get_The_Image {
 
 		// Set the image args.
 		$this->image_args = array(
+			'id'      => $attachment_id,
 			'src'     => $image[0], 
 			'width'   => $image[1],
 			'height'  => $image[2],
@@ -751,9 +757,21 @@ final class Get_The_Image {
 		// Add the image attributes to the <img /> element.
 		$html = sprintf( '<img src="%s"%s alt="%s" class="%s"%s itemprop="image" />', esc_attr( $this->image_args['src'] ), $srcset, esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
 
-		// If $link_to_post is set to true, link the image to its post.
-		if ( $this->args['link_to_post'] )
-			$html = '<a href="' . get_permalink( $this->args['post_id'] ) . '" title="' . esc_attr( get_post_field( 'post_title', $this->args['post_id'] ) ) . '">' . $html . '</a>';
+		// If $link is set to true, link the image to its post.
+		if ( false !== $this->args['link'] ) {
+
+			if ( 'post' === $this->args['link'] || true === $this->args['link'] )
+				$url = get_permalink( $this->args['post_id'] );
+
+			elseif ( 'file' === $this->args['link'] )
+				$url = $this->image_args['src'];
+
+			elseif ( 'attachment' === $this->args['link'] && isset( $this->image_args['id'] ) )
+				$url = get_permalink( $this->image_args['id'] );
+
+			if ( !empty( $url ) )
+				$html = sprintf( '<a href="%s">%s</a>', esc_url( $url ), $html );
+		}
 
 		// If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail().
 		if ( !empty( $this->image_args['post_thumbnail_id'] ) )
