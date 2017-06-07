@@ -420,7 +420,8 @@ final class Get_The_Image {
 		$this->_get_image_attachment( $post_thumbnail_id );
 
 		// Add the post thumbnail ID.
-		$this->image_args['post_thumbnail_id'] = $post_thumbnail_id;
+		if ( $this->image_args )
+			$this->image_args['post_thumbnail_id'] = $post_thumbnail_id;
 	}
 
 	/**
