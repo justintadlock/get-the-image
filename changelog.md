@@ -1,12 +1,32 @@
 # Change Log
 
+## [1.1.0] - 2017-09-22
+
+### Added
+
+* New `srcset_sizes` argument for adding an array of `'image-size' => 'descriptor'` key/value pairs, which handles responsive images.
+* New `link` argument that can be set to `post` (links to post), `file` (links to image file), `attachment` (links to attachment page if image is attachment), or `false` to link to nothing.
+* New `link_class` argument to add a custom HTML class to the wrapping link element.
+* Image classes based on the content width vs. the image width (`cw-equal`, `cw-lesser`, `cw-greater`).
+* `min_width` argument to only show image if it meets the minimum width provided.
+* `min_height` argument to only show image if it meets the minimum height provided.
+* Introduces the `image_attr` argument, which allows developers to pass in an array of attributes that they want applied to `<img>` tag.
+
+### Changed
+
+* New `get_image_attr()` and `get_image_class()` methods were added to split off and clean up the code for getting the image attributes and classes.
+
+### Deprecated
+
+* Deprecated the `link_to_post` argument in favor of the new `link` argument.
+
 ## [1.0.1]
 
-### Fixed 
+### Fixed
 
 * Changed priority of `split_content` filter to make sure images are split from the content.
 
-### [1.0.0]
+## [1.0.0]
 
 ### Added
 
