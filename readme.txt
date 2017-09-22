@@ -1,7 +1,7 @@
 === Get the Image ===
 
 Contributors: greenshady
-Donate link: http://themehybrid.com/donate
+Donate link: https://themehybrid.com/donate
 Tags: image, images, thumbnail
 Requires at least: 3.9
 Stable tag: 1.0.1
@@ -12,7 +12,7 @@ An easy-to-use image script for adding things such as thumbnail, slider, gallery
 
 == Description ==
 
-Get the Image is one of the most advanced thumbnail/image scripts ever created for WordPress. 
+Get the Image is one of the most advanced thumbnail/image scripts ever created for WordPress.
 
 It is used everywhere from small blogs to large, enterprise-level solutions like [WordPress.com VIP](http://vip.wordpress.com/).  Get the Image offers something for everybody. Much of the reason for its success is because it uses standard WordPress code and methods for doing what it needs to do, which is to simply grab images.
 
@@ -32,15 +32,15 @@ Other image plugins have come and gone, but Get the Image has stood the test of 
 
 ### Professional support ###
 
-If you need professional plugin support from me, the plugin author, you can access the support forums at [Theme Hybrid](http://themehybrid.com/support), which is a professional WordPress help/support site where I handle support for all my plugins and themes for a community of 40,000+ users (and growing).
+If you need professional plugin support from me, the plugin author, you can access the support forums at [Theme Hybrid](https://themehybrid.com/support), which is a professional WordPress help/support site where I handle support for all my plugins and themes for a community of 40,000+ users (and growing).
 
 ### Plugin Development ###
 
-If you're a theme author, plugin author, or just a code hobbyist, you can follow the development of this plugin on its [GitHub repository](https://github.com/justintadlock/get-the-image). 
+If you're a theme author, plugin author, or just a code hobbyist, you can follow the development of this plugin on its [GitHub repository](https://github.com/justintadlock/get-the-image).
 
 ### Donations ###
 
-Yes, I do accept donations.  If you want to buy me a beer or whatever, you can do so from my [donations page](http://themehybrid.com/donate).  I appreciate all donations, no matter the size.  Further development of this plugin is not contingent on donations, but they are always a nice incentive.
+Yes, I do accept donations.  If you want to buy me a beer or whatever, you can do so from my [donations page](https://themehybrid.com/donate).  I appreciate all donations, no matter the size.  Further development of this plugin is not contingent on donations, but they are always a nice incentive.
 
 == Installation ==
 

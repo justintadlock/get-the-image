@@ -151,27 +151,27 @@ Saving an image to the `Thumbnail` custom field automatically.
 This is an example Loop, which may differ slightly from your theme, but the concept is the same.  The call to get the image can go anywhere between the opening and closing lines.
 
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-	
+
 		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	
+
 			<?php get_the_image( array( 'meta_key' => 'feature_img', 'size' => 'medium', 'width' => '200', 'height' => '200', 'image_class' => 'feature' ) ); ?>
-	
+
 			<h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
-	
+
 			<div class="entry-summary">
 				<?the_excerpt(); ?>
 			</div>
-	
+
 		</div>
-	
+
 	<?php endwhile; endif; ?>
 
 ### Protect yourself from errors in the future ###
 
 Sometimes, we stop using plugins, but we forget to remove the function calls to the plugin in our theme files.  When deactivated, this causes errors.  To protect yourself from these errors, you can call the image script like this:
 
-	<?php if ( function_exists( 'get_the_image' ) ) { 
-		get_the_image(); 
+	<?php if ( function_exists( 'get_the_image' ) ) {
+		get_the_image();
 	} ?>
 
 Basically, this just checks to see if the plugin is activated and has loaded the appropriate function.
@@ -245,7 +245,7 @@ You will still have the `size` and `meta_key` classes plus your additional class
 * Use the WordPress-saved attachment alt text for the image.
 * Only add `$out['src']` if `$out['url']` is set when returning as an array.
 * Allow `https` when returning as an array.
-* Use the correct variable (`$attachment_id`) when getting an image via attachment. 
+* Use the correct variable (`$attachment_id`) when getting an image via attachment.
 
 ### Version 0.8.1 ###
 
@@ -330,7 +330,7 @@ You will still have the `size` and `meta_key` classes plus your additional class
 
 ## Support ##
 
-I run a WordPress community called [Theme Hybrid](http://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee.
+I run a WordPress community called [Theme Hybrid](https://themehybrid.com), which is where I fully support all of my WordPress projects, including plugins.  You can sign up for an account to get plugin support for a small yearly fee.
 
 I know.  I know.  You might not want to pay for support, but just consider it a donation to the project.  To continue making cool, GPL-licensed plugins and having the time to support them, I must pay the bills.
 
@@ -338,4 +338,4 @@ I know.  I know.  You might not want to pay for support, but just consider it a 
 
 Get the Image is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-2008&thinsp;&ndash;&thinsp;2014 &copy; [Justin Tadlock](http://justintadlock.com).
+2008&thinsp;&ndash;&thinsp;2017 &copy; [Justin Tadlock](http://justintadlock.com).
