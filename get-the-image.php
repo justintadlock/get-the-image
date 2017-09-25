@@ -3,7 +3,7 @@
  * Plugin Name: Get The Image
  * Plugin URI:  https://themehybrid.com/plugins/get-the-image
  * Description: This is a highly intuitive script that can grab an image by custom field, featured image, post attachment, or extracting it from the post's content.
- * Version:     1.1.0-dev
+ * Version:     1.1.0
  * Author:      Justin Tadlock
  * Author URI:  https://themehybrid.com
  */
