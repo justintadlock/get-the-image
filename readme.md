@@ -2,7 +2,7 @@
 
 Get the Image is a plugin that grabs images for you.  It was designed to make the process of things such as adding thumbnails, feature images, and/or other images to your blog much easier, but it's so much more than that.  It is an image-based representation of your WordPress posts.
 
-## What the plugin does ##
+## What the plugin does
 
 This plugin was made to easily get an image related to a post.  This is the default method order in which the plugin attempts to grab an image.
 
