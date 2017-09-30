@@ -1,0 +1,12 @@
+{
+    "name": "justintadlock/get-the-image",
+    "description": "Get the Image WordPress plugin",
+    "type": "wordpress-plugin",
+    "license": "GPL2+",
+    "authors": [
+        {
+            "name": "Justin Tadlock",
+            "email": "justin@justintadlock.com"
+        }
+    ]
+}
